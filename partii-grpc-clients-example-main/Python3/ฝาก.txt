@@ -1,0 +1,3 @@
+ใช้ได้
+python partii-client-process-wav-file.py audio.wav 0niRHCX9q2pEknt3HHKiuWowW6k264Su
+python partii-client-process-wav-file.py audio2.wav 0niRHCX9q2pEknt3HHKiuWowW6k264Su
