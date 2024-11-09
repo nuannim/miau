@@ -35,7 +35,7 @@ async def upload_file(file: UploadFile = File(...)):
         file_content = await file.read()
 
         file.read() # Specify the directory where you want to save the file 
-        save_directory = "C:/Users/noey/Desktop/github repo/miau" 
+        save_directory = "C:/Users/noey/Desktop/github repo/miau/Python3" 
         os.makedirs(save_directory, exist_ok=True) 
         file_path = os.path.join(save_directory, file.filename) 
         # Save the file to the specified location 
