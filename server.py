@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import wave
 import io
+import os
 
 app = FastAPI()
 
@@ -33,22 +34,35 @@ async def upload_file(file: UploadFile = File(...)):
     if file:
         file_content = await file.read()
 
-        # Log the first few bytes of the file content to check the format 
-        print(file_content[:20]) 
-        # Process the WAV file in-memory 
-        try: 
-            audio_stream = io.BytesIO(file_content) 
-            with wave.open(audio_stream, 'rb') as wf: 
-                print("Number of channels:", wf.getnchannels()) 
-                print("Sample width:", wf.getsampwidth()) 
-                print("Frame rate:", wf.getframerate()) 
-                print("Number of frames:", wf.getnframes()) 
-                print("Parameters:", wf.getparams()) 
+        file.read() # Specify the directory where you want to save the file 
+        save_directory = "C:/Users/noey/Desktop/github repo/miau" 
+        os.makedirs(save_directory, exist_ok=True) 
+        file_path = os.path.join(save_directory, file.filename) 
+        # Save the file to the specified location 
+        with open(file_path, "wb") as f: 
+            f.write(file_content) 
+            
+        return JSONResponse(
+            content={"message": f"File successfully saved to {file_path}"}, 
+            status_code=200
+        )
+
+        # # Log the first few bytes of the file content to check the format 
+        # print(file_content[:20]) 
+        # # Process the WAV file in-memory 
+        # try: 
+        #     audio_stream = io.BytesIO(file_content) 
+        #     with wave.open(audio_stream, 'rb') as wf: 
+        #         print("Number of channels:", wf.getnchannels()) 
+        #         print("Sample width:", wf.getsampwidth()) 
+        #         print("Frame rate:", wf.getframerate()) 
+        #         print("Number of frames:", wf.getnframes()) 
+        #         print("Parameters:", wf.getparams()) 
                 
-                # You can now work with the audio data in your Python code 
-                return JSONResponse(content={"message": "File successfully processed"}, status_code=200) 
-        except wave.Error as e: 
-            return JSONResponse(content={"message": f"Error processing file: {e}"}, status_code=400)
+        #         # You can now work with the audio data in your Python code 
+        #         return JSONResponse(content={"message": "File successfully processed"}, status_code=200) 
+        # except wave.Error as e: 
+        #     return JSONResponse(content={"message": f"Error processing file: {e}"}, status_code=400)
 
         # # Process the WAV file in-memory
         # audio_stream = io.BytesIO(file_content)
