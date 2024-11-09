@@ -3,9 +3,11 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from fastapi.middleware.cors import CORSMiddleware
-import wave
-import io
 import os
+
+import requests
+import numpy as np
+import soundfile as sf
 
 app = FastAPI()
 
@@ -41,41 +43,30 @@ async def upload_file(file: UploadFile = File(...)):
         # Save the file to the specified location 
         with open(file_path, "wb") as f: 
             f.write(file_content) 
-            
-        return JSONResponse(
-            content={"message": f"File successfully saved to {file_path}"}, 
-            status_code=200
-        )
 
-        # # Log the first few bytes of the file content to check the format 
-        # print(file_content[:20]) 
-        # # Process the WAV file in-memory 
-        # try: 
-        #     audio_stream = io.BytesIO(file_content) 
-        #     with wave.open(audio_stream, 'rb') as wf: 
-        #         print("Number of channels:", wf.getnchannels()) 
-        #         print("Sample width:", wf.getsampwidth()) 
-        #         print("Frame rate:", wf.getframerate()) 
-        #         print("Number of frames:", wf.getnframes()) 
-        #         print("Parameters:", wf.getparams()) 
-                
-        #         # You can now work with the audio data in your Python code 
-        #         return JSONResponse(content={"message": "File successfully processed"}, status_code=200) 
-        # except wave.Error as e: 
-        #     return JSONResponse(content={"message": f"Error processing file: {e}"}, status_code=400)
+        url = "https://api.aiforthai.in.th/partii-webapi"
+        files = {'wavfile': (f'temp.wav', open(f'C:/Users/noey/Desktop/github repo/miau/Python3/audio.wav', 'rb'), 'audio/wav')}
+        headers = {
+            'Apikey': "Zvm3yLtP2nK6McN0i6nOU5inHFWVVdHu",
+            'Cache-Control': "no-cache",
+            'Connection': "keep-alive",
+        }
 
-        # # Process the WAV file in-memory
-        # audio_stream = io.BytesIO(file_content)
-        # with wave.open(audio_stream, 'rb') as wf:
-        #     print("Number of channels:", wf.getnchannels())
-        #     print("Sample width:", wf.getsampwidth())
-        #     print("Frame rate:", wf.getframerate())
-        #     print("Number of frames:", wf.getnframes())
-        #     print("Parameters:", wf.getparams())
+        param = {"outputlevel": "--uttlevel", "outputformat": "--txt"}
+        response = requests.request(
+            "POST", url, headers=headers, files=files, data=param)
+        ret = response.json()
+        # print(ret["message"])
+        word = ret["message"]
+        word = word.replace(" ", "")
+        print(word)
 
-        # # You can now work with the audio data in your Python code
-        
-        # return JSONResponse(content={"message": "File successfully processed"}, status_code=200)
+        # if word == ('สวัสดี'):
+        #     print(True)
+        # else:
+        #     print(False)
+
+        return JSONResponse(content={"message": "File successfully processed"}, status_code=200)
 
 if __name__ == "__main__":
     import uvicorn
