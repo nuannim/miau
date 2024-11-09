@@ -1,8 +1,7 @@
-// {
-//     "sentences": [
-//         "hello",
-//         "aespa",
-//         "cherish my love"
-//     ]
-// }
-{"sentences":"hello" ,"name" : "aespa","care" :"cherish my love"}
+{
+    "sentences": [
+        "hello",
+        "aespa",
+        "cherish my love"
+    ]
+}

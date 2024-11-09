@@ -31,9 +31,9 @@
         <div class="archive"><img src="/target_11091578.png" alt=""></div>
     </main>
 </body>
-<<script>
+<script>
     function fetchJSON() {
-            fetch('data.json')
+            fetch('sentences.json')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -41,9 +41,12 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Convert JSON object to formatted string and display
-                    const jsonString = JSON.stringify(data, null, 4);
-                    document.getElementById("e-sentence").innerHTML = <pre>${jsonString}</pre>;
+                    const insideword = document.getElementById("e-sentence");
+                    data.sentences.forEach(sentence => {
+                    const item = document.createElement("div");
+                    item.textContent = sentence;
+                    insideword.appendChild(item);
+            });
                 })
                 .catch(error => {
                     console.error('Error fetching JSON:', error);
