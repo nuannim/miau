@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Recorder</title>
+</head>
+<body>
+
+  <h2>Voice Recorder</h2>
+  <button id="recordButton">Start Recording</button>
+  <audio id="audioPlayback" controls></audio>
+
+  <script>
+    const recordButton = document.getElementById("recordButton");
+    const audioPlayback = document.getElementById("audioPlayback");
+
+    let mediaRecorder;
+    let audioChunks = [];
+
+    recordButton.onclick = async () => {
+      if (recordButton.textContent === "Start Recording") {
+        startRecording();
+      } else {
+        stopRecording();
+      }
+    };
+
+    async function startRecording() {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audioPlayback.src = audioUrl; 
+        audioPlayback.load();
+        audioChunks = []; 
+      
+
+        // Save the audioBlob to a file 
+        // const link = document.createElement('a'); 
+        // link.href = audioUrl; 
+        // link.download = 'audio.wav'; 
+        // link.click();
+
+        // Send the audioBlob to the FastAPI server 
+        const formData = new FormData(); 
+        formData.append('file', audioBlob, 'audio.wav'); 
+        try { 
+          const response = await fetch(
+                        'http://localhost:8000/upload', 
+                        { 
+                          method: 'POST', 
+                          body: formData 
+                        }
+                      ); 
+          const result = await response.json(); 
+          console.log(result.message); 
+        } catch (error) { 
+          console.error('Error:', error); 
+        } 
+      };
+
+      mediaRecorder.start();
+      recordButton.textContent = "Stop Recording";
+    }
+
+    async function stopRecording() {
+      mediaRecorder.stop();
+      recordButton.textContent = "Start Recording";
+    }
+
+  </script>
+</body>
+</html>

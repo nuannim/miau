@@ -30,6 +30,18 @@ def text_to_speech(text):
         print(f"Error {response.status_code}: {response.text}")
         return None
 
+# ฟังก์ชันสำหรับดาวน์โหลดและเล่นไฟล์เสียง
+def download_and_play_audio(wav_url, filename='test2.wav'):
+    resp = requests.get(wav_url, headers={'Apikey': Apikey})
+    
+    if resp.status_code == 200:
+        with open(filename, 'wb') as file:
+            file.write(resp.content)
+            print(f'Downloaded: {filename}')
+            IPython.display.display(IPython.display.Audio(filename))
+    else:
+        print(f"Error downloading file: {resp.reason}")
+
 # สร้าง endpoint สำหรับการแปลงข้อความเป็นเสียง
 @app.get("/get_audio")
 def get_audio():
