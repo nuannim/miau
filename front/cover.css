@@ -1,0 +1,20 @@
+*{
+    font-family: Kanit;
+}
+body{
+    margin: 0;
+    height: auto;
+    background-color: #F4F4F4;
+    overflow: hidden;
+}
+main {
+    position: relative;
+    width: 90vh;
+}
+.left, .right{
+    position: absolute;
+    width: 180vh;
+}
+.left{
+    left: -32vh;
+}
