@@ -107,6 +107,55 @@ main {
 #mic img{
     width: 30px;
 }
+/* Popup container */
+.popup {
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow:hidden;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Popup content */
+.popup-content {
+    background-color: #ffffff;
+    margin: 12% auto;
+    padding: 20px;
+    width: 50%;
+    height: 50%;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-direction: column;
+}
+.popup-content p{
+    font-size: 4vh;
+}
+/* Close button */
+.close {
+    position: absolute;
+    color: #aaa;
+    top: 0;
+    font-size: 5vh;
+    font-weight: bold;
+    top: 3px;
+    right: 20px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 @media (max-width: 800px){
     #r-sentence{
         font-size: 4vh;
