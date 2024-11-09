@@ -40,6 +40,13 @@ async function startRecording() {
     audioPlayback.src = audioUrl; 
     audioPlayback.load();
     audioChunks = []; 
+  
+
+    // Save the audioBlob to a file 
+    const link = document.createElement('a'); 
+    link.href = audioUrl; 
+    link.download = 'audio.wav'; 
+    link.click();
   };
 
   mediaRecorder.start();
