@@ -13,50 +13,67 @@
 
   <script>
     const recordButton = document.getElementById("recordButton");
-const audioPlayback = document.getElementById("audioPlayback");
+    const audioPlayback = document.getElementById("audioPlayback");
 
-let mediaRecorder;
-let audioChunks = [];
+    let mediaRecorder;
+    let audioChunks = [];
 
-recordButton.onclick = async () => {
-  if (recordButton.textContent === "Start Recording") {
-    startRecording();
-  } else {
-    stopRecording();
-  }
-};
+    recordButton.onclick = async () => {
+      if (recordButton.textContent === "Start Recording") {
+        startRecording();
+      } else {
+        stopRecording();
+      }
+    };
 
-async function startRecording() {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  mediaRecorder = new MediaRecorder(stream);
-  
-  mediaRecorder.ondataavailable = (event) => {
-    audioChunks.push(event.data);
-  };
+    async function startRecording() {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+      };
 
-  mediaRecorder.onstop = () => {
-    const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-    const audioUrl = URL.createObjectURL(audioBlob);
-    audioPlayback.src = audioUrl; 
-    audioPlayback.load();
-    audioChunks = []; 
-  
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audioPlayback.src = audioUrl; 
+        audioPlayback.load();
+        audioChunks = []; 
+      
 
-    // Save the audioBlob to a file 
-    const link = document.createElement('a'); 
-    link.href = audioUrl; 
-    link.download = 'audio.wav'; 
-    link.click();
-  };
+        // Save the audioBlob to a file 
+        // const link = document.createElement('a'); 
+        // link.href = audioUrl; 
+        // link.download = 'audio.wav'; 
+        // link.click();
 
-  mediaRecorder.start();
-  recordButton.textContent = "Stop Recording";
-}
+        // Send the audioBlob to the FastAPI server 
+        const formData = new FormData(); 
+        formData.append('file', audioBlob, 'audio.wav'); 
+        try { 
+          const response = await fetch(
+                        'http://localhost:8000/upload', 
+                        { 
+                          method: 'POST', 
+                          body: formData 
+                        }
+                      ); 
+          const result = await response.json(); 
+          console.log(result.message); 
+        } catch (error) { 
+          console.error('Error:', error); 
+        } 
+      };
 
-function stopRecording() {
-  mediaRecorder.stop();
-  recordButton.textContent = "Start Recording";
-}
+      mediaRecorder.start();
+      recordButton.textContent = "Stop Recording";
+    }
+
+    function stopRecording() {
+      mediaRecorder.stop();
+      recordButton.textContent = "Start Recording";
+    }
 
   </script>
 </body>
