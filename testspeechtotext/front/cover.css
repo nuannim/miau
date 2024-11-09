@@ -1,0 +1,78 @@
+*{
+    font-family: Kanit;
+    color: #365469;
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    height: auto;
+    overflow: hidden;
+}
+main {
+    position: relative;
+    /* width: 90vh; */
+    height: 100vh;
+    background-image: url(/front/bg.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.left, .right{
+    position: fixed;
+}
+.left{
+    /* left: -32vh; */
+    z-index: 1;
+    left: 0;
+}
+.left img{
+    width: 130vh;
+}
+.right{
+    right: 0;
+}
+.right img{
+    width: 130vh;
+}
+.box{
+    position: fixed;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+}
+.title{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height: 50vh;
+    position: fixed;
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+    padding: 8vh;
+    border-radius: 10vh;
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2), 4px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.text{
+    font-size: 20vh;
+    height: 60%;
+    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20vh;
+    background-color: white;
+    font-size: 4vh;
+    width: 20%;
+    height: 7vh;
+    padding: 2vh;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}

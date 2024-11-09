@@ -1,0 +1,181 @@
+syntax = "proto3";
+
+package partii;
+option java_package = "partii.grpc";
+
+service Transcription {
+		rpc SingleTranscribe(stream AudioData) returns (stream TranscriptionResult) {}
+		rpc LiveTranscribe(stream AudioData) returns (stream TranscriptionResult) {}
+		rpc GetAvailable(EmptyMsg) returns (AvailableConnection) {}
+		rpc GetBuildNumber(EmptyMsg) returns (BuildNumber) {}
+}
+
+message Word {
+	string wordstr = 1;
+}
+
+message WordResult {
+	int64 wordid = 1;
+	string wordstr = 2;
+}
+
+message EmptyMsg {}
+
+message AvailableConnection {
+		int64 Available = 1;
+}
+
+message BuildNumber {
+		string BuildDate = 1;
+}
+
+enum AudioCodec {
+        LINEAR16 = 0;
+		SPEEX = 1;
+		FLAC = 2;
+		MP3 = 3;
+		MULAW = 4;
+		AMR = 5;
+		AMR_WB = 6;
+		OGG_OPUS = 7;
+}
+
+enum ResultType {
+		PARTIAL = 0;
+		RESULT = 1;
+		FINISHED = 2;
+		WAKEWORD = 3;
+		TRANSCRIPT = 4;
+}
+
+
+message AuthData {
+        string ApiKey = 1;
+		int64 SamplingRate = 2;
+		string ClientID = 3;
+		int64 Codec = 4;
+}
+
+message AuthStatus {
+        string Message = 1;
+		StatusCode AuthStatus = 2;
+}
+
+enum AudioDataType {
+		SPEECH = 0;
+		NONSPEECH = 1;
+		ENDPOINT = 2;
+}
+
+message AudioData {
+        bytes ByteChunk = 1;
+		int64 Bytelen = 2;
+		AudioDataType Datatype = 3;
+}
+
+enum StatusCode {
+        Unknown = 0;
+        Ok = 1;
+        Failed = 2;
+}
+
+message WordsLevel {
+
+		string word = 1;
+		float confidence = 2;
+		float startTime = 3;
+		float endTime = 4;
+		int64 wordNumber = 5;
+		
+		repeated PhonesLevel phones = 6;
+		
+}
+
+message PhonesLevel {
+
+		string phone = 1;
+		float confidence = 2;
+		float startTime = 3;
+		float endTime = 4;
+		int64 phoneNumber = 5;
+		
+}
+
+message TranscriptionResult {
+		string transcript = 1;
+		float confidence = 2;
+		float startTime = 3;
+		float endTime = 4;
+		int64 sentenceNumber = 5;
+		ResultType sentenceType = 6;
+		
+		repeated WordsLevel words = 7;
+
+		EmotionResult emotion = 8;
+		SpeakerResult speaker = 9;
+		StatusCode Status = 10;
+		
+}
+
+message SpeakerResult{
+		int64 speakerID = 1;
+		float startTime = 2;
+		float endTime = 3;
+		int64 speakerNumber = 4;
+		ResultType speakerType = 5;
+		StatusCode Status = 6;
+}
+
+message EmotionResult {
+		string emotion = 1;
+		float confidence = 2;
+		float startTime = 3;
+		float endTime = 4;
+		int64 emotionNumber = 5;
+		ResultType segmentType = 6;
+		repeated SubEmotion subemotions = 7;
+		StatusCode Status = 8;
+		
+}
+
+message SubEmotion {
+
+		string emotion = 1;
+		float confidence = 2;
+		float startTime = 3;
+		float endTime = 4;
+		int64 emotionNumber = 5;
+		
+}
+
+message VADProb {
+		int64 frameid = 1;
+		float probability = 2;
+		AudioDataType datatype = 3;
+}
+
+message CalibrateVadResult {
+		float vadthreshold = 1;
+		repeated VADProb probs = 2;
+		StatusCode Status = 3;
+		
+}
+
+message WakeWordResult {
+		string word = 1;
+		float confidence = 2;
+		float startTime = 3;
+		float endTime = 4;
+		int64 wakewordNumber = 5;
+		ResultType sentenceType = 6;
+		StatusCode Status = 7;
+		
+}
+
+message WakeWordAndTranscriptionResult{
+	TranscriptionResult transcript = 1;
+	WakeWordResult wakeword = 2;
+	ResultType resulttype = 3;
+	StatusCode Status = 4;
+	string statusmsg = 5;
+}
