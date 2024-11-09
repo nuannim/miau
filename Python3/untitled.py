@@ -11,7 +11,7 @@ import soundfile as sf
 # ipd.Audio('C:/Users/noey/Desktop/github repo/miau/Python3/audiotest.wav') # load a local WAV file
 
 url = "https://api.aiforthai.in.th/partii-webapi"
-files = {'wavfile': (f'temp.wav', open(f'C:/Users/noey/Desktop/github repo/miau/Python3/audiotest.wav', 'rb'), 'audio/wav')}
+files = {'wavfile': (f'temp.wav', open(f'C:/Users/noey/Desktop/github repo/miau/Python3/audio.wav', 'rb'), 'audio/wav')}
 headers = {
     'Apikey': "Zvm3yLtP2nK6McN0i6nOU5inHFWVVdHu",
     'Cache-Control': "no-cache",
