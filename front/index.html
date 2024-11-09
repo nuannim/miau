@@ -28,7 +28,23 @@
             </div>
         </div>
         <div id="done">ตกลง</div>
-        <div class="archive"><img src="/front/target_11091578.png" alt=""></div>
+        <div class="archive" onclick="togglePopup()"><img src="/front/target_11091578.png" alt=""></div>
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span class="close" onclick="togglePopup()">&times;</span>
+                <p>วันนี้คุณทำแบบฝึกหัดสำเร็จไป 1 ข้อ!</p>
+            </div>
+        </div>
     </main>
+    <script>
+        function togglePopup() {
+            var popup = document.getElementById("popup");
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+            } else {
+                popup.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
