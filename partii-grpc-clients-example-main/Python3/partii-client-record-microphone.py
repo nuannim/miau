@@ -1,4 +1,5 @@
 
+# -*- coding: utf-8 -*-
 
 #for mac user
 #xcode-select --install
@@ -249,7 +250,8 @@ def run():
 if __name__ == '__main__':
     start_time = time.time()
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    # config.read('config.ini')
+    config.read('config.ini', encoding='utf-8')
 
     _SERVER_IP = config['DEFAULT']['_SERVER_IP']
     _SERVER_PORT = int(config['DEFAULT']['_SERVER_PORT'])
