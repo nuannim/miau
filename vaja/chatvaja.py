@@ -25,23 +25,14 @@ def text_to_speech(text):
     response = requests.post(url, json=data, headers=headers)
 
     if response.status_code == 200:
+        print("Response JSON:", response.json())
         wav_url = response.json()['wav_url']
         return wav_url
     else:
         print(f"Error {response.status_code}: {response.text}")
         return None
 
-# # ฟังก์ชันสำหรับดาวน์โหลดและเล่นไฟล์เสียง
-# def download_and_play_audio(wav_url, filename='test2.wav'):
-#     resp = requests.get(wav_url, headers={'Apikey': Apikey})
-    
-#     if resp.status_code == 200:
-#         with open(filename, 'wb') as file:
-#             file.write(resp.content)
-#             print(f'Downloaded: {filename}')
-#             IPython.display.display(IPython.display.Audio(filename))
-#     else:
-#         print(f"Error downloading file: {resp.reason}")
+
 
 def download_audio(wav_url, filename):
     retry_count = 0
@@ -78,7 +69,7 @@ for i, sentence in enumerate(sentences):
         download_audio(wav_url, filename)
         
         # เพิ่มหน่วงเวลาเพื่อป้องกันการชน Rate Limit
-        time.sleep(15)
+        time.sleep(10)
 
 # # เลือกคำที่ต้องการจากคำที่โหลดมา (เช่น คำแรก)
 # text_to_convert = sentences[0]

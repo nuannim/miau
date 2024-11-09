@@ -12,7 +12,7 @@
 <body>
     <main>
         <div class="box" id="example">
-            <div id="volumn"><img src="/volume-up_4774916.png" alt="volumn"></div>
+            <div id="volumn" onclick="playAudio()"><img src="/volume-up_4774916.png" alt="volumn"></div>
             <div id="e-sentence"></div>
         </div>
         <div class="box" id="result">
@@ -70,8 +70,28 @@
                 showtext();
             }
         }
+
+        // ฟังก์ชันเล่นไฟล์เสียงที่ตรงกับข้อความปัจจุบัน
+    function playAudio() {
+        // const audioPath = `audio_files/sentence_${index + 1}.wav`; // Update the path with vaja folder
+        const audioPath = `http://127.0.0.1:5500/audio_files/sentence_${index + 1}.wav`;
+        console.log(index);
+        // Log the full URL path to verify it
+        console.log("Full audio path:", window.location.origin + "/" + audioPath);
+
+        const audio = new Audio(audioPath);
+        audio.play().then(() => {
+            console.log(`Playing audio: ${audioPath}`);
+        }).catch(error => {
+            console.error("Error playing audio:", error);
+            alert(`Failed to play audio for: ${audioPath}`);
+        });
+    }
+
+
     document.getElementById("done").addEventListener("click", stepIndex);
 
-fetchJSON();
+    
+    fetchJSON();
 </script>
 </html>
