@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="twist.css">
+    <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <div class="box" id="example">
+            <div id="e-sentence">
+                <img src="/front/dog.png" alt="">
+                <img src="/front/fish.png" alt="">
+                <img src="/front/eye.png" alt="">
+            </div>
+        </div>
+        <div class="box" id="result">
+            <div class="text">
+                <div id="prop">ออกเสียงตามรูปภาพ</div>
+            </div>
+            <div id="r-sentence">หมา ปลา ตา</div>
+            <div id="redo">
+                <div id="mic">
+                    <img src="/front/mic_8473359.png" alt="">
+                </div>
+                <img src="/front/undo_7435085.svg" alt="redo">
+            </div>
+        </div>
+        <div id="done">ตกลง</div>
+        <div class="archive" onclick="togglePopup()"><img src="/front/target_11091578.png" alt=""></div>
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span class="close" onclick="togglePopup()">&times;</span>
+                <p>วันนี้คุณทำแบบฝึกหัดสำเร็จไป 1 ข้อ!</p>
+            </div>
+        </div>
+    </main>
+    <script>
+        function togglePopup() {
+            var popup = document.getElementById("popup");
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+            } else {
+                popup.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

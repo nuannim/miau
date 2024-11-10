@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="css/index.css">
     <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,23 +12,23 @@
 <body>
     <main>
         <div class="box" id="example">
-            <div id="volumn"><img src="/front/volume-up_4774916.png" alt="volumn"></div>
-            <div id="e-sentence">ออกเสียงตามประโยค</div>
+            <div id="volumn" onclick="playAudio()"><img src="images/volume-up_4774916.png" alt="volumn"></div>
+            <div id="e-sentence"></div>
         </div>
         <div class="box" id="result">
             <div class="text">
-                <div id="prop">ออกเสียงตามประโยค</div>
+                <div id="prop"></div>
             </div>
-            <div id="r-sentence">ออกเสียงตามประโยค</div>
+            <div id="r-sentence"></div>
             <div id="redo">
                 <div id="mic">
-                    <img src="/front/mic_8473359.png" alt="">
+                    <img src="images/mic_8473359.png" alt="">
                 </div>
-                <img src="/front/undo_7435085.svg" alt="redo">
+                <img src="images/undo_7435085.svg" alt="redo">
             </div>
         </div>
-        <div id="done">ตกลง</div>
-        <div class="archive" onclick="togglePopup()"><img src="/front/target_11091578.png" alt=""></div>
+        <div id="done">Next</div>
+        <div class="archive" onclick="togglePopup()"><img src="images/target_11091578.png" alt=""></div>
         <div id="popup" class="popup">
             <div class="popup-content">
                 <span class="close" onclick="togglePopup()">&times;</span>
@@ -37,6 +37,7 @@
         </div>
     </main>
     <script>
+////////////////////////////////////////////////// front
         function togglePopup() {
             var popup = document.getElementById("popup");
             if (popup.style.display === "block") {
@@ -45,6 +46,185 @@
                 popup.style.display = "block";
             }
         }
+////////////////////////////////////////////////// noeysod
+    const recordButton = document.getElementById("mic");
+    const doneButton = document.getElementById("done")
+
+    let mediaRecorder;
+    let audioChunks = [];
+    let mic = 0;
+
+    recordButton.onclick = async () => {
+      if (mic === 0) {
+        startRecording();
+      } else {
+        stopRecording();
+      }
+    };
+
+    async function startRecording() {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        // audioPlayback.src = audioUrl; 
+        // audioPlayback.load();
+        audioChunks = []; 
+
+        // Send the audioBlob to the FastAPI server 
+        const formData = new FormData();
+        formData.append('file_stt', audioBlob, 'audio.wav'); 
+        try { 
+          const response = await fetch(
+                        'http://localhost:8000/upload', 
+                        { 
+                          method: 'POST', 
+                          body: formData 
+                        }
+                      ); 
+          const result = await response.json(); 
+          console.log(result.message); 
+          displayWord(result.message);
+        } catch (error) { 
+          console.error('Error:', error); 
+        }
+      };
+
+      mediaRecorder.start();
+    //   recordButton.textContent = "Stop Recording";
+      mic = 1;
+
+    }
+
+    async function stopRecording() {
+      mediaRecorder.stop();
+    //   recordButton.textContent = "Start Recording";
+        mic = 0;
+    }
+
+////////////////////////////////////////////////// cj
+    // เอาไว้นับตำแหน่ง กับเก็บ เจสัน อิอิอิอิอิ แอ่ว
+    let index = 0;
+    let array = [];
+
+    function fetchJSON() {
+            fetch('/css/sentences.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    array = data.sentences;
+                    showtext();
+                    // sendIndexToServer(index);
+                })
+                .catch(error => {
+                    console.error('Error fetching JSON:', error);
+                    document.getElementById("e-sentence").textContent = 'Error loading JSON data';
+                });
+        }
+
+    function showtext(){
+        const insideword = document.getElementById("e-sentence");
+        insideword.textContent = array[index];
+        // insideword.innerHTML = 
+    }
+
+    function stepIndex() {
+            if (index < array.length - 1) {
+                index++;
+                showtext();
+            }
+            else {
+                index = 0;
+                showtext();
+            }
+        }
+
+    function displayWord(word) { 
+        const resultElement = document.getElementById("r-sentence"); 
+        resultElement.textContent = word; 
+    }
+
+
+    // async function sendIndexToServer(index) { 
+    //     const formData = new FormData(); 
+    //     formData.append('index', index); 
+    //     try { 
+    //         const response = await fetch('http://localhost:8000/play_audio', { 
+    //             method: 'POST', 
+    //             body: formData 
+    //         }); 
+    //         const result = await response.json(); 
+    //         console.log(result.message); 
+    //     } catch (error) { 
+    //         console.error('Error:', error); } 
+    // }
+
+    // document.getElementById("done").addEventListener("click", () => {
+    //     if (words.length > 0) { 
+    //         sendWordToServer(array[index]); 
+    //         index = (index + 1) % array.length; 
+    //         showWord(); 
+    //     } 
+    // });
+
+    // document.getElementById("next-button").addEventListener("click", () => {
+    //     if (words.length > 0) {
+    //         sendIndexToServer(currentIndex); // Sending the current index
+    //         currentIndex = (currentIndex + 1) % words.length; // Moving to the next index
+    //         showWord(); // Displaying the next word
+    //     }
+    // });
+
+
+    //     // ฟังก์ชันเล่นไฟล์เสียงที่ตรงกับข้อความปัจจุบัน
+    // function playAudio() {
+    //     // const audioPath = `audio_files/sentence_${index + 1}.wav`; // Update the path with vaja folder
+    //     const audioPath = `C:/Users/noey/Desktop/github repo/miau/sentence_${index + 1}.wav`;
+    //     console.log(index);
+    //     // Log the full URL path to verify it
+    //     console.log("Full audio path:", window.location.origin + "/" + audioPath);
+
+    //     const audio = new Audio(audioPath);
+    //     audio.play().then(() => {
+    //         console.log(`Playing audio: ${audioPath}`);
+    //     }).catch(error => {
+    //         console.error("Error playing audio:", error);
+    //         alert(`Failed to play audio for: ${audioPath}`);
+    //     });
+    // }
+
+    // function playAudio() {
+    //     // sendIndexToServer(index);
+
+    //     // const audioPath = `audio_files/sentence_${index + 1}.wav`; // Update the path with vaja folder
+    //     const audioPath = `C:/Users/noey/Desktop/github repo/miau/test.wav`;
+    //     console.log(index);
+    //     // Log the full URL path to verify it
+    //     console.log("Full audio path:", window.location.origin + "/" + audioPath);
+
+    //     const audio = new Audio(audioPath);
+    //     audio.play().then(() => {
+    //         console.log(`Playing audio: ${audioPath}`);
+    //     }).catch(error => {
+    //         console.error("Error playing audio:", error);
+    //         alert(`Failed to play audio for: ${audioPath}`);
+    //     });
+    // }
+
+    document.getElementById("done").addEventListener("click", stepIndex);
+
+    fetchJSON();
+
     </script>
 </body>
 </html>

@@ -40,17 +40,10 @@
         audioPlayback.src = audioUrl; 
         audioPlayback.load();
         audioChunks = []; 
-      
-
-        // Save the audioBlob to a file 
-        // const link = document.createElement('a'); 
-        // link.href = audioUrl; 
-        // link.download = 'audio.wav'; 
-        // link.click();
 
         // Send the audioBlob to the FastAPI server 
         const formData = new FormData(); 
-        formData.append('file', audioBlob, 'audio.wav'); 
+        formData.append('file_stt', audioBlob, 'audio.wav'); 
         try { 
           const response = await fetch(
                         'http://localhost:8000/upload', 
