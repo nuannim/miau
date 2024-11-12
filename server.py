@@ -36,13 +36,6 @@ app.mount("/css", StaticFiles(directory="front/css"), name="css")
 app.mount("/images", StaticFiles(directory="front/images"), name="images")
 template = Jinja2Templates(directory="front")
 
-# @app.get("/", response_class=HTMLResponse)
-# async def serve_html():
-#     # with open("C:/Users/noey/Desktop/github repo/miau/front/test.html", "r") as f:
-#     with open("C:/Users/noey/Desktop/github repo/miau/front/index.html", "r", encoding="utf-8") as f:
-#         html_content = f.read()
-#     return HTMLResponse(content=html_content, status_code=200)
-
 @app.get("/", response_class=HTMLResponse)
 async def serve_html(request : Request):
     return template.TemplateResponse(
