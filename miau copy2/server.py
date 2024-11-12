@@ -16,6 +16,8 @@ from aift.speech import tts
 
 import json
 
+import myList
+
 setting.set_api_key('mkipQeIRuF90FiQgUAgD4qvRNNMLM9u2')
 
 # tts.convert('สวัสดีครับ', 'file.wav')
@@ -82,62 +84,17 @@ async def upload_file(file_stt: UploadFile = File(...)):
 
         return JSONResponse(content={"message": word}, status_code=200)
 
-@app.post("/play_audio")
-async def play_audio(index : int = Form(...)):
-    # mylist = ["สวัสดี", "วันปีใหม่", "น้องคะ"]
-    with open('front/css/sentences.json', 'r', encoding='utf-8') as f: 
-        data = json.load(f) 
-        mylist = data['sentences'] 
-        word = mylist[index] # Process the word 
-        # tts.convert(word, "file.wav")
+@app.post("/send_index")
+async def receive_index(index : int = Form(...)):
+    print('recieve index : %s' %(index))
+    print(myList.mylist)
+    wordIndex = myList.mylist[index]
 
-        print('word :', word)
-    
-        import os
-
-        Apikey = '0niRHCX9q2pEknt3HHKiuWowW6k264Su'
-
-        # สังเคราะห์เสียง
-        url = 'https://api.aiforthai.in.th/vaja9/synth_audiovisual'
-        headers = {'Apikey': Apikey, 'Content-Type': 'application/json'}
-        text = "สวัสดี"  # Replace this with the actual text you want to process
-        data = {'input_text': text, 'speaker': 1, 'phrase_break': 0, 'audiovisual': 0}
-        response = requests.post(url, json=data, headers=headers)
-        print(response.json())
-
-        # Create the downloads directory if it doesn't exist
-        download_dir = 'C:/Users/noey/Desktop/github repo/miau/Python3'
-        if not os.path.exists(download_dir):
-            os.makedirs(download_dir)
-
-        # # ดาวน์โหลดไฟล์เสียง
-        # resp = requests.get(response.json()['wav_url'], headers={'Apikey': Apikey})
-        # if resp.status_code == 200:
-        #     file_path = os.path.join(download_dir, 'file.wav')
-        #     with open(file_path, 'wb') as a:
-        #         a.write(resp.content)
-        #         print(f'Downloaded: {file_path}')
-        #         # IPython.display.display(IPython.display.Audio(file_path))
-        # else:
-        #     print(resp.reason)
-        if (response.json()['msg'] == 'success'):
-            with open('test.wav', 'wb') as a:
-                resp = requests.get(response.json()['wav_url'],headers={'Apikey':Apikey})
-                if resp.status_code == 200:
-                    a.write(resp.content)
-                    print('Downloaded: '+response.json()['wav_url'])
-                    # IPython.display.display(IPython.display.Audio('test.wav'))
-                else:
-                    print(resp.reason)
-                    exit(1)
-
-
-
-
-
-
-
-    return
+    print(wordIndex)
+    return JSONResponse(
+                        content={"message2" : wordIndex},
+                        status_code=200
+    )
 
 if __name__ == "__main__":
     import uvicorn
