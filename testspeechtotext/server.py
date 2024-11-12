@@ -19,11 +19,11 @@ app.add_middleware(
 ) 
 
 # Mount a directory of static files (such as the HTML file)
-app.mount("/static", StaticFiles(directory="C:/Users/noey/Desktop/github repo/miau/front"), name="static")
+app.mount("/static", StaticFiles(directory="C:/Users/noey/Desktop/github repo/miau/testspeechtotext/front"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def serve_html():
-    with open("C:/Users/noey/Desktop/github repo/miau/front/test.html", "r") as f:
+    with open("C:/Users/noey/Desktop/github repo/miau/testspeechtotext/front/test.html", "r") as f:
         html_content = f.read()
     return HTMLResponse(content=html_content, status_code=200)
 
@@ -35,7 +35,7 @@ async def upload_file(file: UploadFile = File(...)):
         file_content = await file.read()
 
         file.read() # Specify the directory where you want to save the file 
-        save_directory = "C:/Users/noey/Desktop/github repo/miau/Python3" 
+        save_directory = "C:/Users/noey/Desktop/github repo/miau/testspeechtotext/Python3" 
         os.makedirs(save_directory, exist_ok=True) 
         file_path = os.path.join(save_directory, file.filename) 
         # Save the file to the specified location 
