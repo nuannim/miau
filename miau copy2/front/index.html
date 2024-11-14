@@ -90,7 +90,7 @@
                       ); 
           const result = await response.json(); 
           console.log(result.message); 
-          displayWord(result.message);
+          displayRecordedWord(result.message);
         } catch (error) { 
           console.error('Error:', error); 
         }
@@ -123,7 +123,7 @@
                 const result = await response.json();
                 console.log('Server response:', result.message);
                 // Navigate to the home page after successfully sending the index
-                displayWord(result.message2);
+                displayListWord(result.message2);
                 // window.location.href = "http://localhost:8000/";
             } else {
                 console.error('Server response:', response.statusText);
@@ -182,17 +182,23 @@
             // showtext();
         }
 
-    function displayWord(word) { 
+    function displayListWord(word) { 
         const resultElement = document.getElementById("e-sentence");
         resultElement.textContent = word; 
     }
 
+    function displayRecordedWord(word) { 
+        const resultElement = document.getElementById("r-sentence");
+        resultElement.textContent = word; 
+    }
 
 
     document.getElementById("done").addEventListener("click", stepIndex);
     // showtext(myList.mylist[index]);
+    // stepIndex();
+    // sendIndexToServer(index);
 
-    displayWord(myList.mylist[index]);
+    displayListWord(myList.mylist[index]);
     // fetchJSON();
 
     </script>
