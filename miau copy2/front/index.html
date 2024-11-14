@@ -123,7 +123,8 @@
                 const result = await response.json();
                 console.log('Server response:', result.message);
                 // Navigate to the home page after successfully sending the index
-                window.location.href = "http://localhost:8000/";
+                displayWord(result.message2);
+                // window.location.href = "http://localhost:8000/";
             } else {
                 console.error('Server response:', response.statusText);
             }
@@ -134,60 +135,65 @@
 
     document.getElementById("done").addEventListener("click", () => {
         sendIndexToServer(index);
+        stepIndex();
     });
 
 
 ////////////////////////////////////////////////// cj
     // เอาไว้นับตำแหน่ง กับเก็บ เจสัน อิอิอิอิอิ แอ่ว
     let index = 0;
-    let array = [];
+    // let array = [];
 
-    function fetchJSON() {
-            fetch('/css/sentences.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    array = data.sentences;
-                    showtext();
-                    // sendIndexToServer(index);
-                })
-                .catch(error => {
-                    console.error('Error fetching JSON:', error);
-                    document.getElementById("e-sentence").textContent = 'Error loading JSON data';
-                });
-        }
+    // function fetchJSON() {
+    //         fetch('/css/sentences.json')
+    //             .then(response => {
+    //                 if (!response.ok) {
+    //                     throw new Error('Network response was not ok');
+    //                 }
+    //                 return response.json();
+    //             })
+    //             .then(data => {
+    //                 array = data.sentences;
+    //                 showtext();
+    //                 // sendIndexToServer(index);
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error fetching JSON:', error);
+    //                 document.getElementById("e-sentence").textContent = 'Error loading JSON data';
+    //             });
+    //     }
 
-    function showtext(){
-        const insideword = document.getElementById("e-sentence");
-        insideword.textContent = array[index];
-        // insideword.innerHTML = 
-    }
+    // function showtext(){
+    //     const insideword = document.getElementById("e-sentence");
+    //     // insideword.textContent = array[index];
+    //     insideword.textContent = word;
+    //     // insideword.innerHTML = 
+    // }
 
     function stepIndex() {
-            if (index < array.length - 1) {
+            if (index < 2) {
                 index++;
-                showtext();
+                // showtext();
             }
             else {
                 index = 0;
-                showtext();
+                // showtext();
             }
+            // showtext();
         }
 
     function displayWord(word) { 
-        const resultElement = document.getElementById("r-sentence"); 
+        const resultElement = document.getElementById("e-sentence");
         resultElement.textContent = word; 
     }
 
 
 
     document.getElementById("done").addEventListener("click", stepIndex);
+    // showtext(myList.mylist[index]);
 
-    fetchJSON();
+    displayWord(myList.mylist[index]);
+    // fetchJSON();
 
     </script>
 </body>

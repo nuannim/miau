@@ -53,7 +53,7 @@ async def upload_file(file_stt: UploadFile = File(...)):
         file_content = await file_stt.read()
 
         file_stt.read() # Specify the directory where you want to save the file 
-        save_directory = "C:/Users/noey/Desktop/github repo/miau/Python3" 
+        save_directory = "C:/Users/noey/Desktop/github repo/miau/miau copy2/Python3" 
         os.makedirs(save_directory, exist_ok=True) 
         file_path = os.path.join(save_directory, file_stt.filename) 
         # Save the file to the specified location 
@@ -61,7 +61,7 @@ async def upload_file(file_stt: UploadFile = File(...)):
             f.write(file_content) 
 
         url = "https://api.aiforthai.in.th/partii-webapi"
-        files = {'wavfile': (f'temp.wav', open(f'C:/Users/noey/Desktop/github repo/miau/Python3/audio.wav', 'rb'), 'audio/wav')}
+        files = {'wavfile': (f'temp.wav', open(f'C:/Users/noey/Desktop/github repo/miau/miau copy2/Python3/audio.wav', 'rb'), 'audio/wav')}
         headers = {
             'Apikey': "Zvm3yLtP2nK6McN0i6nOU5inHFWVVdHu",
             'Cache-Control': "no-cache",
